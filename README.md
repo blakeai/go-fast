@@ -53,9 +53,11 @@ go test ./01-basics/
 - Interface composition and nil interface gotchas
 
 ### [Chapter 7: Concurrency](./07-concurrency/)
-- Goroutines and the `go` keyword
-- Channels and channel operations
-- Select statements and patterns
+- **Channels**: CSP-based communication primitives (buffered vs unbuffered)
+- **Defer statements**: LIFO execution and guaranteed cleanup
+- **WaitGroups**: Goroutine coordination with `sync.WaitGroup`
+- **defer wg.Done()** pattern - why it goes at the top
+- Select statements and concurrency patterns
 
 ### [Chapter 8: Error Handling](./08-error-handling/)
 - The `error` interface
@@ -131,6 +133,18 @@ func dotProduct[F ~float32|~float64](v1, v2 []F) F {
     // F can be float32, float64, or types with those as underlying types
     // All uses of F in one call must be same concrete type
 }
+```
+
+### **Defer and WaitGroups**
+Defer executes in LIFO order and captures arguments immediately:
+```go
+var wg sync.WaitGroup
+wg.Add(1)
+go func() {
+    defer wg.Done() // registers cleanup, executes when func returns
+    // work happens here
+    // wg.Done() guaranteed to execute even if panic occurs
+}()
 ```
 
 ## Prerequisites
