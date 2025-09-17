@@ -37,8 +37,9 @@ go test ./01-basics/
 
 ### [Chapter 4: Functions](./04-functions/)
 - Function syntax and multiple return values
-- **Method Receivers** - `(s S)` vs `(s *S)`
+- **Method Receivers** - `(s S)` vs `(s *S)` and method set rules
 - Method definition restrictions (same package rule)
+- **Enum pattern** - typed constants with `iota`
 - **Generics syntax** - `[T constraint]` and type parameters
 
 ### [Chapter 5: Structs](./05-structs/)
@@ -145,6 +146,17 @@ go func() {
     // work happens here
     // wg.Done() guaranteed to execute even if panic occurs
 }()
+```
+
+### **Enum Pattern with iota**
+Go uses typed constants for enums, with `iota` for auto-incrementing:
+```go
+type Status int
+const (
+    Pending Status = iota  // 0
+    Running               // 1 
+    Completed             // 2
+)
 ```
 
 ## Prerequisites
