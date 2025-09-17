@@ -31,9 +31,11 @@ go test ./01-basics/
 - Zero values and type inference
 
 ### [Chapter 3: Control Flow](./03-control-flow/)
-- if/else statements and brace placement rules
-- for loops and range
-- switch statements
+- **Single loop construct** - `for` handles all iteration patterns
+- **ASI and brace placement** - opening braces must be on same line
+- **Switch statements** don't fall through (no `break` needed)
+- **Short variable declarations** in `if` statements for scoped variables
+- **Label breaks** and `goto` for complex control flow
 
 ### [Chapter 4: Functions](./04-functions/)
 - Function syntax and multiple return values
