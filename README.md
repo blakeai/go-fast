@@ -1,6 +1,6 @@
 # Go Fast
 
-> ### A learning guide for engineers who want to learn Go fast
+> ### A guide for engineers who want to learn Go fast
 
 ---
 
@@ -221,8 +221,17 @@ make dev-check  # fmt + test (faster)
 - **`Makefile`** - Standard targets for code quality checks
 - **Editor integration** - Configure your editor to run goimports on save
 
-### CI Integration
-The `make check` target runs all quality checks and is perfect for CI pipelines.
+### Further reading
+- [The Tao of Go](https://bitfieldconsulting.com/posts/tao-of-go)
+- [Examples from the Deeper Love of Go](https://github.com/bitfield/love)
+- [Go By Example](https://gobyexample.com/)
+- [Effective Go](https://go.dev/doc/effective_go)
+- [The Uber Go Style Guide](https://github.com/uber-go/guide/tree/master)
+- [The Google Go Style Guide](https://google.github.io/styleguide/go/decisions)
+- [Go Code Review Comments](https://go.dev/wiki/CodeReviewComments)
+- [Go Test Comments](https://go.dev/wiki/TestComments)
+- [Common Go Mistakes](https://100go.co/)
+- [Let's Go](https://lets-go.alexedwards.net/)
 
 ## Contributing
 

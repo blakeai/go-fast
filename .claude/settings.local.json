@@ -7,7 +7,10 @@
       "Bash(go install:*)",
       "Bash(goimports:*)",
       "Bash(golangci-lint run:*)",
-      "Bash(go run:*)"
+      "Bash(go run:*)",
+      "Bash(rm:*)",
+      "Bash(gofmt:*)",
+      "Bash(mv:*)"
     ],
     "deny": [],
     "ask": []
