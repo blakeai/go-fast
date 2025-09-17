@@ -6,7 +6,8 @@
       "Bash(make:*)",
       "Bash(go install:*)",
       "Bash(goimports:*)",
-      "Bash(golangci-lint run:*)"
+      "Bash(golangci-lint run:*)",
+      "Bash(go run:*)"
     ],
     "deny": [],
     "ask": []

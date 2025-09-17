@@ -61,7 +61,7 @@ func deferForCleanup() {
 		if err != nil {
 			return
 		}
-		err := os.Remove("temp.txt")
+		err = os.Remove("temp.txt")
 		if err != nil {
 			return
 		} // Clean up
@@ -69,7 +69,7 @@ func deferForCleanup() {
 	}()
 
 	// Do work with file
-	writeString, err := file.WriteString("Hello, defer!")
+	_, err = file.WriteString("Hello, defer!")
 	if err != nil {
 		return
 	}
