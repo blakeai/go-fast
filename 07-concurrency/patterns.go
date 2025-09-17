@@ -261,7 +261,7 @@ func rateLimitingExample() {
 	}
 }
 
-func main() {
+func patternsExample() {
 	workerPoolExample()
 	fanOutFanInExample()
 	pipelineExample()

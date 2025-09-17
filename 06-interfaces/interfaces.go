@@ -176,20 +176,23 @@ func demonstrateNilInterfaces() {
 	var counter Counter // nil interface
 	fmt.Printf("counter == nil: %t\n", counter == nil)
 
-	var intCounter *IntCounter        // nil pointer
+	var intCounter *IntCounter        // nil pointer //nolint:staticcheck // Used for educational nil comparison example
 	var counter2 Counter = intCounter // interface with nil value
 
 	// Check for nil interface
-	if counter == nil {
+	if               //goland:noinspection GoDfaConstantCondition
+	counter == nil { //nolint:govet // Intentional nil interface check example
 		fmt.Println("counter is a nil interface")
 	}
 
 	// Check for nil value inside interface
+	//nolint:govet,staticcheck // Intentional example of impossible comparison
 	if counter2 == nil {
 		fmt.Println("this won't print - interface is not nil, value is")
 	} else {
 		fmt.Println("counter2 interface is not nil, but contains a nil value")
 	}
+	//nolint:staticcheck // Suppress a related info message
 
 	// Proper nil value check
 	if reflect.ValueOf(counter2).IsNil() {
@@ -202,7 +205,7 @@ func demonstrateNilInterfaces() {
 	fmt.Printf("counter3 value: %d\n", counter3.Value())
 }
 
-// Practical interface usage
+// Shape Practical interface usage
 type Shape interface {
 	Area() float64
 	Perimeter() float64
@@ -245,7 +248,7 @@ func printShapeInfo(s Shape) {
 	}
 }
 
-func main() {
+func interfacesExample() {
 	fmt.Println("=== Basic Interface Usage ===")
 
 	// Usage - pass interface as value
@@ -260,7 +263,10 @@ func main() {
 
 	// No explicit "implements" declaration needed
 	var w Writer = &FileWriter{filename: "output.txt"}
-	w.Write([]byte("Hello, interfaces!"))
+	_, err := w.Write([]byte("Hello, interfaces!"))
+	if err != nil {
+		return
+	}
 
 	if fw, ok := w.(*FileWriter); ok {
 		fmt.Printf("File content: %s\n", fw.GetContent())
@@ -270,7 +276,10 @@ func main() {
 
 	// Buffer satisfies ReadWriter automatically
 	var rw ReadWriter = &Buffer{}
-	rw.Write([]byte("Hello, buffer!"))
+	_, err = rw.Write([]byte("Hello, buffer!"))
+	if err != nil {
+		return
+	}
 
 	readBuf := make([]byte, 5)
 	n, _ := rw.Read(readBuf)
@@ -287,7 +296,10 @@ func main() {
 	readBuf = make([]byte, 10)
 	n, _ = rc.Read(readBuf)
 	fmt.Printf("Read from file: %s\n", string(readBuf[:n]))
-	rc.Close()
+	err = rc.Close()
+	if err != nil {
+		return
+	}
 
 	demonstrateEmptyInterface()
 	demonstrateNilInterfaces()

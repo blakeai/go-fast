@@ -83,6 +83,7 @@ func waitGroupCommonMistakes() {
 	fmt.Println("Mistake 1: Race condition")
 	for i := 0; i < 2; i++ {
 		go func(id int) {
+			//nolint:govet,staticcheck // Intentional bad example
 			wg.Add(1) // WRONG: Race condition!
 			defer wg.Done()
 			fmt.Printf("Worker %d\n", id)
@@ -175,7 +176,7 @@ func waitGroupWithContext() {
 	}
 }
 
-func main() {
+func waitgroupsExample() {
 	basicWaitGroup()
 	waitGroupWithoutDefer()
 	waitGroupWithDefer()

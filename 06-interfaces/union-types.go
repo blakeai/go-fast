@@ -6,7 +6,7 @@ import (
 	"time"
 )
 
-// Basic Handler interface - replaces EmailHandler | SMSHandler union
+// Handler Basic Handler interface - replaces EmailHandler | SMSHandler union
 type Handler interface {
 	Handle() error
 }
@@ -275,7 +275,8 @@ func handleError(err AppError) {
 	}
 }
 
-func main() {
+//goland:noinspection SqlNoDataSourceInspection,SqlNoDataSourceInspection
+func unionTypesExample() {
 	fmt.Println("=== Basic Handler Union Types ===")
 
 	handlers := []Handler{
@@ -292,13 +293,19 @@ func main() {
 
 	// Process all handlers uniformly
 	for _, handler := range handlers {
-		process(handler)
+		err := process(handler)
+		if err != nil {
+			return
+		}
 	}
 
 	fmt.Println("\n=== Handler Union Types with Type Discrimination ===")
 
 	for _, handler := range handlers {
-		processWithDetails(handler)
+		err := processWithDetails(handler)
+		if err != nil {
+			return
+		}
 	}
 
 	fmt.Println("\n=== Payment Method Union Types ===")
@@ -311,7 +318,10 @@ func main() {
 
 	amount := 100.0
 	for _, method := range paymentMethods {
-		processPayment(method, amount)
+		err := processPayment(method, amount)
+		if err != nil {
+			return
+		}
 		fmt.Println()
 	}
 

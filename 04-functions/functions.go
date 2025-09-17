@@ -92,7 +92,7 @@ func processData(data string) (int, error) {
 	return value * 2, nil
 }
 
-func main() {
+func functionsExample() {
 	fmt.Println("=== Basic Functions ===")
 	fmt.Printf("add(3, 5) = %d\n", add(3, 5))
 

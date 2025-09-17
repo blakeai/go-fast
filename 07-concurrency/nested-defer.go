@@ -147,7 +147,7 @@ func impossibleWithFlatDefer() {
 	// The "3" between defers can't be achieved with flat defer structure
 }
 
-func main() {
+func nestedDeferExample() {
 	simpleNestedDefer()
 	complexExample()
 	multiLevelNesting()

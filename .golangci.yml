@@ -1,0 +1,137 @@
+run:
+  timeout: 5m
+  tests: true
+  go: "1.21"
+
+issues:
+  exclude-dirs:
+    - vendor
+  exclude-rules:
+    # Exclude some linters from running on tests files
+    - path: _test\.go
+      linters:
+        - gosec
+        - dupl
+        - goconst
+
+    # Exclude main functions from certain checks
+    - path: main\.go
+      linters:
+        - wrapcheck
+        - errcheck
+      text: "main function"
+
+    # Allow fmt.Print* in example code
+    - linters:
+        - revive
+      text: "unhandled-error: Unhandled error in call to function fmt"
+
+    # Allow some complexity in educational examples
+    - path: examples/
+      linters:
+        - gocyclo
+        - gocognit
+
+  max-issues-per-linter: 0
+  max-same-issues: 0
+
+linters-settings:
+  revive:
+    rules:
+      - name: exported
+        arguments: [checkPrivateReceivers, sayRepetitiveInsteadOfStutters]
+      - name: unused-parameter
+      - name: unreachable-code
+      - name: superfluous-else
+      - name: struct-tag
+      - name: constant-logical-expr
+      - name: bool-literal-in-expr
+      - name: redefines-builtin-id
+      - name: imports-blacklist
+        arguments: ["crypto/md5", "crypto/sha1"]
+      - name: range-val-in-closure
+      - name: range-val-address
+      - name: waitgroup-by-value
+      - name: atomic
+      - name: empty-lines
+      - name: line-length-limit
+        arguments: [120]
+      - name: call-to-gc
+      - name: duplicated-imports
+      - name: import-shadowing
+      - name: bare-return
+      - name: unused-receiver
+      - name: unhandled-error
+        arguments: ["fmt.Printf", "fmt.Print", "fmt.Println"]
+      - name: cognitive-complexity
+        arguments: [20]
+      - name: cyclomatic
+        arguments: [10]
+
+  gocritic:
+    settings:
+      captLocal:
+        paramsOnly: false
+      underef:
+        skipRecvDeref: false
+
+  exhaustive:
+    check-generated: false
+    default-signifies-exhaustive: false
+
+  goimports:
+    local-prefixes: github.com/your-org/go-fast
+
+  govet:
+    enable-all: true
+    disable:
+      - fieldalignment # Can be noisy for learning examples
+
+  staticcheck:
+    checks: ["all"]
+
+linters:
+  enable:
+    # Built-in linters
+    - govet
+    - gofmt
+    - goimports
+    - staticcheck
+
+    # Code quality
+    - ineffassign
+    - misspell
+    - unconvert
+    - typecheck
+
+    # Style and best practices
+    - exhaustive
+    - gosec
+    - gosimple
+    - goconst
+    - dupl
+    - prealloc
+    - unparam
+    - nakedret
+    - lll
+
+    # Error handling
+    - errorlint
+
+  disable:
+    - gochecknoinits # Allow init functions for examples
+    - gochecknoglobals # Allow globals for demonstration
+    - funlen # Some example functions may be long for educational purposes
+    - maintidx # Maintenance index less critical for learning code
+    - unused # Allow unused functions in educational code
+    - errcheck # Allow unhandled errors in examples
+    - gocyclo # Allow complex examples for learning
+    - revive # Too strict for educational code
+    - wrapcheck # Allow unwrapped errors in examples
+    - gocritic # Too strict for educational examples
+
+output:
+  formats:
+    - format: colored-line-number
+      print-issued-lines: true
+      print-linter-name: true

@@ -6,6 +6,7 @@ import (
 	"time"
 )
 
+//goland:noinspection GoBoolExpressions
 func basicSwitch() {
 	fmt.Println("=== Basic Switch Statements ===")
 
@@ -117,6 +118,7 @@ func typeSwitch() {
 	}
 }
 
+//goland:noinspection ALL
 func switchWithoutExpression() {
 	fmt.Println("\n=== Switch Without Expression (replaces if-else chains) ===")
 
@@ -208,6 +210,7 @@ func fallThroughExample() {
 	fmt.Println("(fallthrough demo)")
 }
 
+//goland:noinspection GoBoolExpressions
 func switchVsIfElse() {
 	fmt.Println("\n=== Switch vs If-Else Performance ===")
 
@@ -281,6 +284,7 @@ type Triangle struct {
 	base, height float64
 }
 
+//goland:noinspection GoBoolExpressions
 func practicalSwitchExamples() {
 	fmt.Println("\n=== Practical Switch Examples ===")
 
@@ -339,7 +343,7 @@ func practicalSwitchExamples() {
 	}
 }
 
-func main() {
+func switchExample() {
 	basicSwitch()
 	switchWithShortDeclaration()
 	typeSwitch()

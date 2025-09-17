@@ -49,7 +49,7 @@ func mapSlice[T any, U any](slice []T, mapper func(T) U) []U {
 	return result
 }
 
-// Generic stack implementation
+// Stack Generic stack implementation
 type Stack[T any] struct {
 	items []T
 }
@@ -78,28 +78,28 @@ func (s *Stack[T]) Size() int {
 	return len(s.items)
 }
 
-// Constraint interfaces
+// Numeric Constraint interfaces
 type Numeric interface {
 	~int | ~int8 | ~int16 | ~int32 | ~int64 |
 		~uint | ~uint8 | ~uint16 | ~uint32 | ~uint64 |
 		~float32 | ~float64
 }
 
-func min[T Numeric](a, b T) T {
+func minExample[T Numeric](a, b T) T {
 	if a < b {
 		return a
 	}
 	return b
 }
 
-func max[T Numeric](a, b T) T {
+func maxExample[T Numeric](a, b T) T {
 	if a > b {
 		return a
 	}
 	return b
 }
 
-// Generic with method constraint
+// Stringer Generic with method constraint
 type Stringer interface {
 	String() string
 }
@@ -110,7 +110,7 @@ func printStrings[T Stringer](items []T) {
 	}
 }
 
-// Custom type implementing Stringer
+// Product Custom type implementing Stringer
 type Product struct {
 	Name  string
 	Price float64
@@ -158,7 +158,7 @@ func sort3[T Ordered](a, b, c T) (T, T, T) {
 	return a, b, c
 }
 
-func main() {
+func genericsExample() {
 	fmt.Println("=== Basic Generics ===")
 
 	// Float vectors
@@ -209,8 +209,8 @@ func main() {
 	}
 
 	fmt.Println("\n=== Numeric Constraints ===")
-	fmt.Printf("min(5, 3) = %d\n", min(5, 3))
-	fmt.Printf("max(2.5, 7.1) = %.1f\n", max(2.5, 7.1))
+	fmt.Printf("minExample(5, 3) = %d\n", minExample(5, 3))
+	fmt.Printf("maxExample(2.5, 7.1) = %.1f\n", maxExample(2.5, 7.1))
 
 	fmt.Println("\n=== Interface Constraints ===")
 	products := []Product{

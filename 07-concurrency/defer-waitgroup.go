@@ -42,7 +42,7 @@ func deferDoneWithPanic() {
 
 		fmt.Println("Worker starting...")
 		panic("something went wrong!")
-		fmt.Println("This won't execute")
+
 	}()
 
 	wg.Wait()
@@ -166,7 +166,7 @@ func comparisonWithoutDefer() {
 	fmt.Println("All workers completed")
 }
 
-func main() {
+func deferWaitgroupExample() {
 	whyDeferDone()
 	deferDoneWithPanic()
 	deferDoneWithEarlyReturn()

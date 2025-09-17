@@ -222,7 +222,7 @@ func (w Warning) String() string { return fmt.Sprintf("WARNING (%d)", w.Code) }
 func (e Error) Level() int     { return 3 }
 func (e Error) String() string { return fmt.Sprintf("ERROR: %v", e.Error) }
 
-func main() {
+func enumsExample() {
 	fmt.Println("=== Basic Enum Usage ===")
 
 	status := Running

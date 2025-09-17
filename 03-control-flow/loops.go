@@ -234,7 +234,7 @@ func loopPerformanceTips() {
 	fmt.Printf("Sum using traditional for: %d\n", sum2)
 }
 
-func main() {
+func loopsExample() {
 	traditionalForLoop()
 	whileStyleLoop()
 	infiniteLoop()

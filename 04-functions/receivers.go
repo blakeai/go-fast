@@ -116,7 +116,7 @@ func (b *BankAccount) GetBalance() float64 {
 	return b.balance
 }
 
-func main() {
+func receiversExample() {
 	fmt.Println("=== Value vs Pointer Receivers ===")
 
 	counter := Counter{value: 5}
@@ -163,6 +163,9 @@ func main() {
 		fmt.Printf("Withdrawal error: %v\n", err)
 	}
 
-	account.Withdraw(30.0)
+	err = account.Withdraw(30.0)
+	if err != nil {
+		return
+	}
 	fmt.Printf("Final balance: $%.2f\n", account.GetBalance())
 }

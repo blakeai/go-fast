@@ -111,7 +111,7 @@ func channelDirections() {
 	fmt.Printf("Message: %s\n", msg)
 }
 
-func main() {
+func channelsExample() {
 	basicChannels()
 	bufferedChannels()
 	selectStatement()

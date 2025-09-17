@@ -2,7 +2,11 @@
   "permissions": {
     "allow": [
       "Bash(go mod:*)",
-      "Bash(mkdir:*)"
+      "Bash(mkdir:*)",
+      "Bash(make:*)",
+      "Bash(go install:*)",
+      "Bash(goimports:*)",
+      "Bash(golangci-lint run:*)"
     ],
     "deny": [],
     "ask": []

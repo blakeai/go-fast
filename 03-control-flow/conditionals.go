@@ -7,7 +7,7 @@ import (
 	"strings"
 )
 
-// Example struct for demonstration
+// User Example struct for demonstration
 type User struct {
 	Name string
 	Age  int
@@ -29,6 +29,7 @@ func doSomething() error {
 	return nil // Change to fmt.Errorf("something went wrong") to test error case
 }
 
+//goland:noinspection GoBoolExpressions
 func basicIfStatements() {
 	fmt.Println("=== Basic If Statements ===")
 
@@ -84,11 +85,13 @@ func shortVariableDeclarations() {
 	}
 
 	// Multiple assignment in if
+	//goland:noinspection GoBoolExpressions
 	if name, age := "Charlie", 35; age > 30 {
 		fmt.Printf("%s is over 30 (age: %d)\n", name, age)
 	}
 }
 
+//goland:noinspection GoUnhandledErrorResult
 func errorCheckingPatterns() {
 	fmt.Println("\n=== Error Checking Patterns ===")
 
@@ -125,6 +128,7 @@ func errorCheckingPatterns() {
 	}
 }
 
+//goland:noinspection GoBoolExpressions
 func scopeExamples() {
 	fmt.Println("\n=== Variable Scope in If Statements ===")
 
@@ -144,13 +148,14 @@ func scopeExamples() {
 	fmt.Printf("Back to outer x: %d\n", x) // Outer x is restored
 }
 
+//goland:noinspection GoDfaConstantCondition
 func nilChecks() {
 	fmt.Println("\n=== Nil Checks and Pointer Safety ===")
 
 	var user *User // nil pointer
 
 	// Check for nil before accessing
-	if user != nil {
+	if user != nil { //nolint:nilness // Intentional nil check example
 		fmt.Printf("User: %s\n", user.Name)
 	} else {
 		fmt.Println("User is nil")
@@ -178,6 +183,7 @@ func nilChecks() {
 	}
 }
 
+//goland:noinspection GoBoolExpressions,GoDfaConstantCondition
 func stringConditions() {
 	fmt.Println("\n=== String Conditions ===")
 
@@ -217,6 +223,7 @@ func stringConditions() {
 	}
 }
 
+//goland:noinspection GoBoolExpressions
 func compoundConditions() {
 	fmt.Println("\n=== Compound Conditions ===")
 
@@ -250,6 +257,7 @@ func compoundConditions() {
 	}
 }
 
+//goland:noinspection GoBoolExpressions
 func asiAndBracePlacement() {
 	fmt.Println("\n=== ASI and Brace Placement ===")
 
@@ -308,7 +316,7 @@ func practicalExamples() {
 	}
 }
 
-func main() {
+func conditionalsExample() {
 	basicIfStatements()
 	shortVariableDeclarations()
 	errorCheckingPatterns()

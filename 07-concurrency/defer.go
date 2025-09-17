@@ -57,13 +57,22 @@ func deferForCleanup() {
 		return
 	}
 	defer func() {
-		file.Close()
-		os.Remove("temp.txt") // Clean up
+		err := file.Close()
+		if err != nil {
+			return
+		}
+		err := os.Remove("temp.txt")
+		if err != nil {
+			return
+		} // Clean up
 		fmt.Println("File cleaned up")
 	}()
 
 	// Do work with file
-	file.WriteString("Hello, defer!")
+	writeString, err := file.WriteString("Hello, defer!")
+	if err != nil {
+		return
+	}
 	fmt.Println("Work with file completed")
 }
 
@@ -80,7 +89,7 @@ func deferWithPanic() {
 
 	fmt.Println("About to panic...")
 	panic("something went wrong")
-	fmt.Println("This won't print")
+
 }
 
 func deferInLoop() {
@@ -110,7 +119,7 @@ func example() {
 	fmt.Println("work")
 }
 
-func main() {
+func deferExample() {
 	basicDefer()
 	deferOrder()
 	deferWithArguments()

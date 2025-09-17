@@ -174,6 +174,51 @@ const (
 3. Navigate to any chapter and run the examples
 4. All code is tested - use tests as additional documentation
 
+## Code Quality and Linting
+
+This repository uses standard Go tooling for consistent code quality:
+
+### Tools Used
+- **goimports** - Canonical Go formatter (includes gofmt + import management)
+- **golangci-lint** - Meta-linter running ~50 linters including staticcheck, govet, revive
+- **go vet** - Built-in Go error detection
+
+### Setup
+```bash
+# Install tools
+make install-tools
+
+# Or manually:
+go install golang.org/x/tools/cmd/goimports@latest
+go install github.com/golangci/golangci-lint/cmd/golangci-lint@latest
+```
+
+### Usage
+```bash
+# Format all code
+make fmt
+
+# Run all linters
+make lint
+
+# Run tests
+make test
+
+# Run all checks (fmt + lint + test)
+make check
+
+# Development workflow
+make dev-check  # fmt + test (faster)
+```
+
+### Configuration
+- **`.golangci.yml`** - Comprehensive linter configuration with educational-friendly settings
+- **`Makefile`** - Standard targets for code quality checks
+- **Editor integration** - Configure your editor to run goimports on save
+
+### CI Integration
+The `make check` target runs all quality checks and is perfect for CI pipelines.
+
 ## Contributing
 
 This is a learning resource in active development. If you find errors or want to suggest improvements, please open an issue or PR.
