@@ -2,12 +2,13 @@
 
 ## Overview
 
-Go interfaces define behavior contracts and are satisfied implicitly. A key principle: pass interfaces as values, not pointers - the interface already handles indirection when needed.
+Go interfaces define behavior contracts and are satisfied implicitly. They serve as Go's solution to union types, allowing multiple types to satisfy the same interface. A key principle: pass interfaces as values, not pointers - the interface already handles indirection when needed.
 
 ## Key Concepts
 
 - Interface definition and implicit satisfaction
 - **No pointers to interfaces** - `SomeInterface` not `*SomeInterface`
+- **Union types via interfaces** - Go's alternative to `TypeA | TypeB`
 - Empty interface and type assertions
 - Interface composition
 - Interface values and nil interfaces
@@ -35,7 +36,8 @@ func (c *IntCounter) Value() int {
 }
 
 // Usage - pass interface as value
-var counter Counter = &IntCounter{0}  // interface holds pointer to IntCounter
+var intCounter IntCounter = 0
+var counter Counter = &intCounter  // interface holds pointer to IntCounter
 counter.Increment() // modifies the underlying IntCounter
 fmt.Println(counter.Value()) // prints: 1
 ```
@@ -43,7 +45,8 @@ fmt.Println(counter.Value()) // prints: 1
 ### Why No Pointers to Interfaces?
 ```go
 // Correct - interface as value
-var counter Counter = &IntCounter{0}
+var intCounter IntCounter = 0
+var counter Counter = &intCounter
 counter.Increment() // works perfectly
 
 // Wrong - don't do this
@@ -168,6 +171,81 @@ if reflect.ValueOf(counter2).IsNil() {
     fmt.Println("interface contains nil value")
 }
 ```
+
+## Go's Interface Solution to Union Types
+See [`union-types.go`](./union-types.go) for implementation.
+
+Union types let you express that a value can be one of several different types. Languages like TypeScript make this explicit with syntax like `string | number`, giving you compile-time guarantees about what types you're working with.
+
+Go doesn't have union types, but it solves similar problems using interfaces and implicit satisfaction.
+
+### The Interface Approach
+
+Instead of declaring `EmailHandler | SMSHandler`, you define a common interface:
+
+```go
+type Handler interface {
+    Handle() error
+}
+
+type EmailHandler struct {
+    recipient string
+    subject   string
+    body      string
+}
+
+type SMSHandler struct {
+    phoneNumber string
+    message     string
+}
+
+func (e EmailHandler) Handle() error {
+    // Send email logic
+    return nil
+}
+
+func (s SMSHandler) Handle() error {
+    // Send SMS logic  
+    return nil
+}
+```
+
+### Implicit Interface Satisfaction
+
+The key difference from Java or C# is that Go uses implicit interface satisfaction. There's no `implements` keyword. The moment `EmailHandler` and `SMSHandler` define methods matching the `Handler` interface signature, they automatically satisfy it.
+
+```go
+func process(h Handler) error {
+    return h.Handle()
+}
+
+// Both work automatically
+var emailHandler Handler = EmailHandler{...}
+var smsHandler Handler = SMSHandler{...}
+```
+
+### Type Discrimination
+
+When you need type discrimination, Go provides type assertions and type switches:
+
+```go
+switch h := handler.(type) {
+case EmailHandler:
+    // Handle email-specific logic
+    fmt.Printf("Sending email to %s\n", h.recipient)
+case SMSHandler:
+    // Handle SMS-specific logic
+    fmt.Printf("Sending SMS to %s\n", h.phoneNumber)
+default:
+    fmt.Println("Unknown handler type")
+}
+```
+
+### Trade-offs
+
+This approach forces you to think about behavior rather than just data shape, which often leads to better design. The downside is you lose some compile-time type information that explicit union types would preserve.
+
+Go's implicit interfaces offer flexibility through composition rather than explicit type unions, embracing the language's philosophy of simplicity over feature completeness.
 
 ## Running the Code
 

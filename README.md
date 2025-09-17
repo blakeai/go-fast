@@ -50,6 +50,7 @@ go test ./01-basics/
 ### [Chapter 6: Interfaces](./06-interfaces/)
 - Interface definition and implicit satisfaction
 - **No pointers to interfaces** - pass `SomeInterface`, not `*SomeInterface`
+- **Union types via interfaces** - Go's alternative to `TypeA | TypeB`
 - Empty interface and type assertions
 - Interface composition and nil interface gotchas
 
