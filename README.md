@@ -73,6 +73,12 @@ go test ./01-basics/
 - **Generics deep dive** - constraints and type inference
 - Reflection basics
 
+### [Chapter 11: String Formatting](./11-string-formatting/)
+- Format verbs (`%s`, `%d`, `%v`, `%+v`, `%T`)
+- Precision and padding control
+- **Printf vs Sprintf** - when to use each
+- Performance considerations for string building
+
 ## Key Insights from This Guide
 
 This guide emphasizes concepts that trip up developers coming from other languages:
