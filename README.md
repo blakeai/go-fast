@@ -1,10 +1,16 @@
-# Go Learning Guide
+# Go Fast
 
-A comprehensive, hands-on guide to learning Go, written by a Java engineer transitioning to Go. This repository covers essential concepts, common pitfalls, and idiomatic patterns with practical examples and tests.
+---
+### A Go Learning Guide
+
+---
+
+This repository is a comprehensive, hands-on guide to learning Go, written from the perspective of a Java engineer
+transitioning to Go. We cover essential concepts, common pitfalls, and idiomatic patterns with practical examples and tests.
 
 **Status: Work in Progress** - Content is being actively developed and refined.
 
-## How to Use This Guide
+### How to Use This Guide
 
 Each chapter is self-contained with examples and tests. Run tests with:
 ```bash

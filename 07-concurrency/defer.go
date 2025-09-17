@@ -57,7 +57,7 @@ func deferForCleanup() {
 		return
 	}
 	defer func() {
-		err := file.Close()
+		err := file.Close() //nolint:govet // Intentional shadowing for error handling
 		if err != nil {
 			return
 		}

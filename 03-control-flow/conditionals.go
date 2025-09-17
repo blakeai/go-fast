@@ -135,6 +135,7 @@ func scopeExamples() {
 	x := 10
 	fmt.Printf("Outer x: %d\n", x)
 
+	//nolint:govet // Intentional variable shadowing example
 	if x := 20; x > 15 {
 		fmt.Printf("Inner x: %d\n", x) // This shadows outer x
 		if y := x * 2; y > 30 {
@@ -155,7 +156,7 @@ func nilChecks() {
 	var user *User // nil pointer
 
 	// Check for nil before accessing
-	if user != nil { //nolint:nilness // Intentional nil check example
+	if user != nil { //nolint:govet // Intentional nil check example
 		fmt.Printf("User: %s\n", user.Name)
 	} else {
 		fmt.Println("User is nil")
@@ -170,6 +171,7 @@ func nilChecks() {
 
 	// Slice nil check
 	var numbers []int
+	//nolint:govet // Intentional nil slice check example
 	if numbers == nil {
 		fmt.Println("Slice is nil")
 		numbers = make([]int, 0)
@@ -263,23 +265,23 @@ func asiAndBracePlacement() {
 
 	condition := true
 
-	// CORRECT - opening brace on same line
+	// CORRECT - opening brace on the same line
 	if condition {
 		fmt.Println("This works correctly")
 	}
 
-	// The following would be WRONG and cause compilation error:
+	// The following would be WRONG and cause a compilation error:
 	/*
 		if condition
-		{  // ASI inserts semicolon after condition
+		{ // ASI inserts semicolon after condition
 			fmt.Println("This won't work")
 		}
 	*/
 
-	// Same rule applies to else
+	// The same rule applies to else
 	if !condition {
 		fmt.Println("Condition is false")
-	} else { // brace must be on same line as else
+	} else { // brace must be on the same line as else
 		fmt.Println("Condition is true")
 	}
 

@@ -176,7 +176,8 @@ func demonstrateNilInterfaces() {
 	var counter Counter // nil interface
 	fmt.Printf("counter == nil: %t\n", counter == nil)
 
-	var intCounter *IntCounter        // nil pointer //nolint:staticcheck // Used for educational nil comparison example
+	//nolint:staticcheck // Used for educational nil comparison example
+	var intCounter *IntCounter        // nil pointer
 	var counter2 Counter = intCounter // interface with nil value
 
 	// Check for nil interface
