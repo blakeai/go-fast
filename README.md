@@ -1,7 +1,6 @@
 # Go Fast
 
----
-### A Go Learning Guide
+> ### A learning guide for engineers who want to learn Go fast
 
 ---
 
