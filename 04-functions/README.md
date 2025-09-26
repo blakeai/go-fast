@@ -177,7 +177,7 @@ stringResult := convert(42, strconv.Itoa)  // T=int, U=string
 ```
 
 ### Closures in Go
-See [`closures.go`](./closures.go) for comprehensive examples.
+See [`closures.go`](./closures.go) for basic examples and [`advanced_closures.go`](./advanced_closures.go) for advanced patterns.
 
 A **closure** is a function value that captures variables from its surrounding lexical scope. Even after the outer function returns, the inner function can continue to access and modify those captured variables.
 
@@ -293,6 +293,276 @@ func createAccount(initial float64) (deposit func(float64), withdraw func(float6
     return deposit, withdraw, balance
 }
 ```
+
+#### Advanced Closure Patterns
+
+Go's closures enable sophisticated programming patterns commonly used in production applications. See [`advanced_closures.go`](./advanced_closures.go) for complete implementations.
+
+##### 1. Middleware Pattern
+Create composable middleware chains using closures:
+
+```go
+func middleware() func(string) string {
+    return func(input string) string {
+        logger := func(next func(string) string) func(string) string {
+            return func(s string) string {
+                fmt.Printf("[LOG] Processing: %s\n", s)
+                result := next(s)
+                fmt.Printf("[LOG] Result: %s\n", result)
+                return result
+            }
+        }
+
+        timer := func(next func(string) string) func(string) string {
+            return func(s string) string {
+                start := time.Now()
+                result := next(s)
+                fmt.Printf("[TIMER] Took %v\n", time.Since(start))
+                return result
+            }
+        }
+
+        handler := func(s string) string {
+            return "Processed: " + s
+        }
+
+        // Build the chain: logger wraps timer wraps handler
+        chain := logger(timer(handler))
+        return chain(input)
+    }
+}
+```
+
+##### 2. Rate Limiter with State Management
+Thread-safe rate limiting using closures and mutex:
+
+```go
+func rateLimiter(requests int, duration time.Duration) func() bool {
+    tokens := requests
+    lastReset := time.Now()
+    mu := sync.Mutex{}
+
+    return func() bool {
+        mu.Lock()
+        defer mu.Unlock()
+
+        now := time.Now()
+        if now.Sub(lastReset) >= duration {
+            tokens = requests
+            lastReset = now
+        }
+
+        if tokens > 0 {
+            tokens--
+            return true
+        }
+        return false
+    }
+}
+```
+
+##### 3. Memoization for Performance
+Cache expensive function results using closures:
+
+```go
+func memoize(fn func(int) int) func(int) int {
+    cache := make(map[int]int)
+    return func(x int) int {
+        if val, exists := cache[x]; exists {
+            return val // Cache hit
+        }
+        result := fn(x)
+        cache[x] = result
+        return result
+    }
+}
+
+// Usage
+memoFib := memoize(fibonacci)
+result := memoFib(40) // Computed once
+result = memoFib(40)  // Returns cached result instantly
+```
+
+##### 4. Event Emitter Pattern
+Implement event-driven programming with closures:
+
+```go
+func createEventEmitter() (on func(string, func()), emit func(string)) {
+    listeners := make(map[string][]func())
+
+    on = func(event string, handler func()) {
+        listeners[event] = append(listeners[event], handler)
+    }
+
+    emit = func(event string) {
+        if handlers, exists := listeners[event]; exists {
+            for _, handler := range handlers {
+                handler()
+            }
+        }
+    }
+
+    return on, emit
+}
+```
+
+##### 5. Iterator Generators
+Generate infinite sequences using closures:
+
+```go
+func fibonacciGenerator() func() int {
+    a, b := 0, 1
+    return func() int {
+        result := a
+        a, b = b, a+b
+        return result
+    }
+}
+
+// Usage
+fibGen := fibonacciGenerator()
+for i := 0; i < 10; i++ {
+    fmt.Print(fibGen(), " ") // 0 1 1 2 3 5 8 13 21 34
+}
+```
+
+##### 6. Builder Pattern with Fluent Interface
+Create fluent APIs using closures:
+
+```go
+type QueryBuilder struct {
+    table  string
+    wheres []string
+    limit  int
+}
+
+func (qb *QueryBuilder) Where(condition string) *QueryBuilder {
+    qb.wheres = append(qb.wheres, condition)
+    return qb
+}
+
+func (qb *QueryBuilder) Limit(n int) *QueryBuilder {
+    qb.limit = n
+    return qb
+}
+
+// Usage
+query := createQueryBuilder()("users").
+    Where("age > 18").
+    Where("city = 'NYC'").
+    Limit(10).
+    Build()
+```
+
+##### 7. Dynamic Sorting with Comparators
+Create flexible sorting logic using closures:
+
+```go
+func sortByAge(ascending bool) func(i, j int) bool {
+    return func(i, j int) bool {
+        if ascending {
+            return people[i].Age < people[j].Age
+        }
+        return people[i].Age > people[j].Age
+    }
+}
+
+sort.Slice(people, sortByAge(true))  // Ascending
+sort.Slice(people, sortByAge(false)) // Descending
+```
+
+##### 8. Retry Logic with Exponential Backoff
+Implement robust error handling patterns:
+
+```go
+func retryWithBackoff(maxAttempts int) func(func() error) error {
+    return func(operation func() error) error {
+        var lastErr error
+        backoff := 100 * time.Millisecond
+
+        for attempt := 1; attempt <= maxAttempts; attempt++ {
+            if err := operation(); err == nil {
+                return nil // Success
+            } else {
+                lastErr = err
+                if attempt < maxAttempts {
+                    time.Sleep(backoff)
+                    backoff *= 2 // Exponential backoff
+                }
+            }
+        }
+
+        return fmt.Errorf("all %d attempts failed: %w", maxAttempts, lastErr)
+    }
+}
+```
+
+##### 9. Function Pipeline/Composition
+Chain transformations using closures:
+
+```go
+func pipeline(funcs ...func(int) int) func(int) int {
+    return func(x int) int {
+        result := x
+        for _, fn := range funcs {
+            result = fn(result)
+        }
+        return result
+    }
+}
+
+// Usage
+double := func(x int) int { return x * 2 }
+addTen := func(x int) int { return x + 10 }
+square := func(x int) int { return x * x }
+
+transform := pipeline(double, addTen, square)
+result := transform(5) // (5*2 + 10)^2 = 400
+```
+
+##### 10. Debounce and Throttle Patterns
+Control function execution timing:
+
+```go
+func debounce(fn func(), delay time.Duration) func() {
+    var timer *time.Timer
+    var mu sync.Mutex
+
+    return func() {
+        mu.Lock()
+        defer mu.Unlock()
+
+        if timer != nil {
+            timer.Stop()
+        }
+        timer = time.AfterFunc(delay, fn)
+    }
+}
+
+func throttle(fn func(), limit time.Duration) func() {
+    var lastCall time.Time
+    var mu sync.Mutex
+
+    return func() {
+        mu.Lock()
+        defer mu.Unlock()
+
+        now := time.Now()
+        if now.Sub(lastCall) >= limit {
+            fn()
+            lastCall = now
+        }
+    }
+}
+```
+
+These patterns demonstrate how closures enable elegant solutions for:
+- **Middleware**: Composable request/response processing
+- **State Management**: Encapsulating mutable state without globals
+- **Caching**: Transparent performance optimization
+- **Event Systems**: Decoupled component communication
+- **Functional Programming**: Composition and transformation pipelines
+- **Concurrency Control**: Rate limiting and timing patterns
 
 ## Go's Enum Pattern
 
