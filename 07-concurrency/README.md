@@ -12,6 +12,68 @@ Go's concurrency model relies heavily on channels for communication and defer st
 - **Select statements**: Non-blocking channel operations
 - **Buffered vs unbuffered channels**
 
+## The Channel Arrow Operator `<-`
+
+Before diving into channel examples, let's understand Go's **channel arrow operator** `<-` - a special two-character symbol made from "less than" and "hyphen": `<` + `-`
+
+### The Arrow Shows Data Flow Direction
+
+```go
+ch <- 42    // Arrow points INTO channel (sending)
+x := <-ch   // Arrow points FROM channel (receiving)
+```
+
+Think of it like a pipe where the arrow shows which way data flows:
+
+```go
+// Sending: data flows INTO the channel
+ch <- 42    // Read as: "send 42 into ch"
+            // Arrow points from value (42) to channel (ch)
+
+// Receiving: data flows OUT OF the channel
+x := <-ch   // Read as: "receive from ch into x"
+            // Arrow points from channel (ch) outward
+```
+
+### Visual Analogy
+
+```
+SENDING:     value --> channel
+             42    ->  ch
+             ch <- 42
+
+RECEIVING:   channel --> variable
+             ch      ->  x
+             x := <-ch
+```
+
+### Channel Direction in Function Signatures
+
+The arrow also indicates channel direction in types:
+
+```go
+func send(ch chan<- int) {    // Send-only channel
+    ch <- 42                   // Can only send
+}
+
+func receive(ch <-chan int) { // Receive-only channel
+    x := <-ch                  // Can only receive
+}
+
+func both(ch chan int) {       // Bidirectional channel
+    ch <- 42                   // Can send
+    x := <-ch                  // Can receive
+}
+```
+
+### Java Comparison
+
+If you're coming from Java, think of:
+- `ch <- 42` as similar to `queue.put(42)` or `blockingQueue.offer(42)`
+- `x := <-ch` as similar to `x = queue.take()` or `x = blockingQueue.poll()`
+
+The `<-` is just Go's syntax for these operations - it's not a "backwards" arrow, but rather shows the direction data moves relative to the channel!
+
 ## Examples
 
 ### Channels: The Communication Highway
