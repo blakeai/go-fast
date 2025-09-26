@@ -7,4 +7,5 @@ func main() {
 	genericsExample()
 	enumsExample()
 	closuresExample()
+	advancedClosuresExample()
 }
