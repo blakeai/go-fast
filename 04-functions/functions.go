@@ -69,14 +69,7 @@ func demonstrateAnonymousFunctions() {
 	fmt.Printf("Stored anonymous function: %d\n", multiply(4, 6))
 }
 
-// Closure example
-func createCounter() func() int {
-	count := 0
-	return func() int {
-		count++
-		return count
-	}
-}
+// Note: More comprehensive closure examples are available in closures.go and advanced_closures.go
 
 // Error handling patterns
 func processData(data string) (int, error) {
@@ -131,11 +124,8 @@ func functionsExample() {
 	fmt.Println("\n=== Anonymous Functions ===")
 	demonstrateAnonymousFunctions()
 
-	fmt.Println("\n=== Closures ===")
-	counter1 := createCounter()
-	counter2 := createCounter()
-	fmt.Printf("counter1: %d, %d, %d\n", counter1(), counter1(), counter1())
-	fmt.Printf("counter2: %d, %d\n", counter2(), counter2())
+	fmt.Println("\n=== Note: Closures ===")
+	fmt.Println("Comprehensive closure examples are available in closures.go and advanced_closures.go")
 
 	fmt.Println("\n=== Error Handling ===")
 	data := []string{"123", "abc", "", "456"}
