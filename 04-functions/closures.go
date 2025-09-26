@@ -2,7 +2,8 @@ package main
 
 import "fmt"
 
-// Basic closure example - captures and modifies external variable
+// adder creates a closure that maintains a running sum.
+// Each call to the returned function adds the argument to the accumulated sum.
 func adder() func(int) int {
 	sum := 0
 	return func(x int) int {
@@ -11,7 +12,8 @@ func adder() func(int) int {
 	}
 }
 
-// Closure with multiple captured variables
+// createCalculator returns a closure that maintains both a total and operation count.
+// It supports basic arithmetic operations and provides operation tracking.
 func createCalculator() func(string, int) int {
 	total := 0
 	operationCount := 0
@@ -33,14 +35,16 @@ func createCalculator() func(string, int) int {
 	}
 }
 
-// Closure factory - returns different closures with captured state
+// makeMultiplier is a closure factory that returns multiplier functions.
+// Each returned function multiplies its input by the captured factor.
 func makeMultiplier(factor int) func(int) int {
 	return func(x int) int {
 		return x * factor
 	}
 }
 
-// Closure in loop - demonstrates historical pitfall (fixed in Go 1.22+)
+// closureInLoop demonstrates the classic closure-in-loop pitfall and its solutions.
+// Shows both the problem and correct patterns for capturing loop variables.
 func closureInLoop() {
 	fmt.Println("\n=== Closure in Loop Examples ===")
 
@@ -71,15 +75,18 @@ func closureInLoop() {
 	}
 }
 
-// Advanced closure - capturing function parameters
-func createValidator(minLength int, maxLength int) func(string) bool {
+// createValidator creates a closure that validates string length within bounds.
+// The returned function captures the min/max parameters for reuse.
+func createValidator(minLength, maxLength int) func(string) bool {
 	return func(input string) bool {
 		length := len(input)
 		return length >= minLength && length <= maxLength
 	}
 }
 
-// Closure with method-like behavior
+// createAccount demonstrates closure-based encapsulation by creating an account with deposit,
+// withdraw, and balance functions that share access to the same currentBalance variable.
+// This pattern provides data privacy similar to object-oriented encapsulation.
 func createAccount(initialBalance float64) (deposit func(float64), withdraw func(float64), balance func() float64) {
 	currentBalance := initialBalance
 

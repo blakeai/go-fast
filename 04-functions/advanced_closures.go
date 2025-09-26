@@ -7,7 +7,8 @@ import (
 	"time"
 )
 
-// 1. Middleware Pattern - HTTP-like middleware chain
+// middleware demonstrates the middleware pattern using closures.
+// Creates a processing chain with logging and timing capabilities.
 func middleware() func(string) string {
 	// Chain of responsibility using closures
 	return func(input string) string {
@@ -43,7 +44,8 @@ func middleware() func(string) string {
 	}
 }
 
-// 2. Rate Limiter - Closure with time-based state
+// rateLimiter creates a closure-based rate limiter with token bucket algorithm.
+// Returns a function that returns true if request is allowed, false if rate limited.
 func rateLimiter(requests int, duration time.Duration) func() bool {
 	tokens := requests
 	lastReset := time.Now()
@@ -68,7 +70,8 @@ func rateLimiter(requests int, duration time.Duration) func() bool {
 	}
 }
 
-// 3. Memoization - Cache function results
+// memoize wraps a function with caching capabilities using closure state.
+// Caches results to avoid expensive recomputations for the same inputs.
 func memoize(fn func(int) int) func(int) int {
 	cache := make(map[int]int)
 	return func(x int) int {
@@ -83,7 +86,8 @@ func memoize(fn func(int) int) func(int) int {
 	}
 }
 
-// Example expensive function for memoization
+// fibonacciRecursive is an intentionally inefficient recursive implementation
+// used to demonstrate the performance benefits of memoization.
 func fibonacciRecursive(n int) int {
 	if n <= 1 {
 		return n
@@ -91,7 +95,8 @@ func fibonacciRecursive(n int) int {
 	return fibonacciRecursive(n-1) + fibonacciRecursive(n-2)
 }
 
-// 4. Event Emitter Pattern
+// createEventEmitter implements the observer pattern using closures.
+// Returns functions to register event handlers and emit events.
 func createEventEmitter() (on func(string, func()), emit func(string)) {
 	listeners := make(map[string][]func())
 
@@ -112,7 +117,8 @@ func createEventEmitter() (on func(string, func()), emit func(string)) {
 	return on, emit
 }
 
-// 5. Iterator Generator - Closure that produces sequences
+// fibonacciGenerator creates an infinite Fibonacci sequence generator.
+// Each call to the returned function produces the next Fibonacci number.
 func fibonacciGenerator() func() int {
 	a, b := 0, 1
 	return func() int {
@@ -122,6 +128,8 @@ func fibonacciGenerator() func() int {
 	}
 }
 
+// primeGenerator creates an infinite prime number sequence generator.
+// Each call to the returned function produces the next prime number.
 func primeGenerator() func() int {
 	current := 2
 
@@ -147,7 +155,8 @@ func primeGenerator() func() int {
 	}
 }
 
-// 6. Builder Pattern with Fluent Interface
+// QueryBuilder demonstrates the builder pattern with fluent interface.
+// Uses method chaining to construct SQL-like queries.
 type QueryBuilder struct {
 	table  string
 	wheres []string
@@ -188,13 +197,9 @@ func (qb *QueryBuilder) Build() string {
 	return query
 }
 
-// 7. Sorting with Custom Comparators
+// sortWithClosures demonstrates custom sorting using closure-based comparators.
+// Shows how closures can capture configuration for flexible sorting behavior.
 func sortWithClosures() {
-	type Person struct {
-		Name string
-		Age  int
-		City string
-	}
 
 	people := []Person{
 		{"Alice", 30, "NYC"},
@@ -237,7 +242,8 @@ func sortWithClosures() {
 	fmt.Println("By city then age:", people)
 }
 
-// 8. Retry Logic with Exponential Backoff
+// retryWithBackoff creates a closure that retries operations with exponential backoff.
+// Implements resilience pattern for handling transient failures.
 func retryWithBackoff(maxAttempts int) func(func() error) error {
 	return func(operation func() error) error {
 		var lastErr error
@@ -265,7 +271,8 @@ func retryWithBackoff(maxAttempts int) func(func() error) error {
 	}
 }
 
-// 9. Pipeline/Chain of Transformations
+// pipeline creates a closure that applies a series of transformations in sequence.
+// Demonstrates functional composition using variadic closure parameters.
 func pipeline(funcs ...func(int) int) func(int) int {
 	return func(x int) int {
 		result := x
@@ -276,7 +283,8 @@ func pipeline(funcs ...func(int) int) func(int) int {
 	}
 }
 
-// 10. Debounce/Throttle Pattern
+// debounce creates a closure that delays function execution until after delay has elapsed
+// since the last invocation. Useful for limiting rapid successive calls.
 func debounce(fn func(), delay time.Duration) func() {
 	var timer *time.Timer
 	var mu sync.Mutex
@@ -293,6 +301,8 @@ func debounce(fn func(), delay time.Duration) func() {
 	}
 }
 
+// throttle creates a closure that limits function execution to at most once per time period.
+// Useful for rate-limiting expensive operations.
 func throttle(fn func(), limit time.Duration) func() {
 	var lastCall time.Time
 	var mu sync.Mutex
