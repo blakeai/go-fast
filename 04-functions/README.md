@@ -10,6 +10,7 @@ Go functions support multiple return values, method receivers, and the enum patt
 - **Method receivers** - `(s S)` vs `(s *S)` and method set rules
 - Method definition restrictions (same package rule)
 - **Enum pattern** - typed constants with `iota`
+- **Closures** - functions that capture variables from their enclosing scope
 - Variadic functions
 - Function as first-class values
 
@@ -175,6 +176,124 @@ result2 := dotProduct([]float32{1.0, 2.0}, []float32{3.0, 4.0})  // F = float32
 stringResult := convert(42, strconv.Itoa)  // T=int, U=string
 ```
 
+### Closures in Go
+See [`closures.go`](./closures.go) for comprehensive examples.
+
+A **closure** is a function value that captures variables from its surrounding lexical scope. Even after the outer function returns, the inner function can continue to access and modify those captured variables.
+
+#### Key Concepts
+
+1. **Functions are first-class values** – you can assign functions to variables, pass them around, or return them
+2. **Closures capture variables** – an inner function can reference variables outside its body
+3. **State preservation** – closures let you maintain state across calls without global variables
+4. **Each closure maintains its own state** – multiple closures from the same factory function are independent
+
+#### Basic Closure Example
+
+```go
+func adder() func(int) int {
+    sum := 0
+    return func(x int) int {
+        sum += x  // captures and modifies 'sum' from outer scope
+        return sum
+    }
+}
+
+func main() {
+    posSum := adder()
+    fmt.Println(posSum(3))  // 3
+    fmt.Println(posSum(5))  // 8  (sum persists between calls)
+    fmt.Println(posSum(10)) // 18
+
+    another := adder()      // independent closure with its own 'sum'
+    fmt.Println(another(2)) // 2
+}
+```
+
+#### Closure Factory Pattern
+
+Closures are excellent for creating specialized functions with pre-configured behavior:
+
+```go
+func makeMultiplier(factor int) func(int) int {
+    return func(x int) int {
+        return x * factor  // 'factor' is captured from outer scope
+    }
+}
+
+double := makeMultiplier(2)  // creates a function that doubles
+triple := makeMultiplier(3)  // creates a function that triples
+
+fmt.Println(double(5))  // 10
+fmt.Println(triple(5))  // 15
+```
+
+#### Closures in Loops (Historical Note)
+
+**Note**: Go 1.22+ fixed the classic closure-in-loop issue. The following now works correctly:
+
+```go
+// Go 1.22+ - works correctly (each iteration gets its own variable)
+var funcs []func() int
+for i := 0; i < 3; i++ {
+    funcs = append(funcs, func() int {
+        return i  // each closure captures its own 'i'
+    })
+}
+// prints 0, 1, 2
+
+// Historical pattern for older Go versions (still valid)
+var correctFuncs []func() int
+for i := 0; i < 3; i++ {
+    correctFuncs = append(correctFuncs, func(val int) func() int {
+        return func() int {
+            return val  // captures the parameter value
+        }
+    }(i))
+}
+```
+
+**For Go versions before 1.22**: All closures would capture the same variable reference, causing them to all return the final value of the loop variable.
+
+#### Advanced Use Cases
+
+**Validation Functions:**
+```go
+func createValidator(minLength int, maxLength int) func(string) bool {
+    return func(input string) bool {
+        length := len(input)
+        return length >= minLength && length <= maxLength
+    }
+}
+
+passwordValidator := createValidator(8, 20)
+fmt.Println(passwordValidator("short"))    // false
+fmt.Println(passwordValidator("good_pass")) // true
+```
+
+**Stateful Objects with Multiple Methods:**
+```go
+func createAccount(initial float64) (deposit func(float64), withdraw func(float64), balance func() float64) {
+    currentBalance := initial
+
+    deposit = func(amount float64) {
+        currentBalance += amount
+    }
+
+    withdraw = func(amount float64) {
+        if amount <= currentBalance {
+            currentBalance -= amount
+        }
+    }
+
+    balance = func() float64 {
+        return currentBalance
+    }
+
+    return deposit, withdraw, balance
+}
+```
+
 ## Go's Enum Pattern
 
 Go doesn't have built-in enums but achieves similar functionality using typed constants with `iota`.
@@ -293,6 +412,7 @@ go test ./...
 - **Enums**: No built-in enum keyword - use typed constants with `iota`
 - **Receivers**: Similar to instance methods but declared outside the type
 - **Method sets**: Go automatically handles value/pointer conversions
+- **Closures**: Similar to Java lambdas but with lexical variable capture (like JavaScript closures)
 
 ## Next Steps
 
